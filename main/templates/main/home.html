@@ -1,0 +1,43 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %}Home Page{% endblock %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+{% for post in posts %}
+    <div style="margin-top:50px; width:642px; height: 800px; border: 1px solid rgba(var(--b6a,219,219,219),1);">
+        <div style="height:70px; border-bottom: 1px solid rgba(var(--b6a,219,219,219),1);">
+            <a href="/profile/{{post.user.id}}"><div style="margin-top:6px; margin-left:6px; float:left;"><img style="border-radius:25px;" src="{% static 'avatars/images/'%}{{post.user.user.path}}" width="50px;" height="50px;"></div>
+            <div style="float: left; margin: 20px 0px 0px 30px;"><p>{{post.user}}</p></div></a>
+        {% if user.id == post.user.id %}  
+            <div style="float:left; margin: 20px 0px 0px 450px;"><b>
+                <form action="" method="POST">{% csrf_token %}<button class="btn" name="dp.{{post.id}}">DELETE</button></form></b>
+            </div>
+        {% endif %}</div>
+            <div style="clear:both;">
+        </div>
+        <div style="border-bottom: 1px solid rgba(var(--b6a,219,219,219),1);  line-height: 360px;  text-align: center; width:640px; height:360px;"><img src="{% static 'posts/images/'%}{{post.path}}" alt="Error" style="max-width:640px; max-height:360px;"></div>
+        <br>
+        <div style="height:300px; margin-left:10px;">
+            <div style=" margin: 10px 10px 10px 10px;">Likes count: {{post.liked_by_count}}</div>
+            <div style=" margin: 10px 10px 10px 10px;"><a href="/profile/{{post.user.id}}">{{post.user}}</a> {{post.description}}</div>
+                <div style="overflow-y:scroll; height:130px;">
+                    {% for comment in post.post.all %}
+                        <div style="float:left;"><a href="/profile/{{comment.user.id}}">{{comment.user}}</a> {{comment.text}}</div>
+                        <div style="float:left; font-size:8px; margin: 0px 0px 0px 20px;">
+                            {% if user.id == comment.user.id %}
+                            <b><form action="" method="POST">{% csrf_token %}<button  name="dc.{{comment.id}}">DELETE</button></form></b>
+                            {% endif %}
+                        </div>
+                        <div style="clear: both;"></div>
+                    {% endfor %}
+                </div>
+            <form action="" method="POST">
+                {% csrf_token %}{{form|crispy}}
+                <button class="btn btn-success" style="margin:10px 0px 10px 0px;" name="ac.{{post.id}}">Comment</button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+
+{% endblock %}

@@ -1,0 +1,68 @@
+{% load static %}
+<!doctype html>
+<html>
+    <head>
+         
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+        {% block style1 %}{% endblock %}
+        <style type="text/css">
+            @font-face {font-family: "BillabongW00-Regular"; src: url("//db.onlinewebfonts.com/t/6d32b8e06f40fb7698cfb714b9e7975d.eot"); src: url("//db.onlinewebfonts.com/t/6d32b8e06f40fb7698cfb714b9e7975d.eot?#iefix") format("embedded-opentype"), url("//db.onlinewebfonts.com/t/6d32b8e06f40fb7698cfb714b9e7975d.woff2") format("woff2"), url("//db.onlinewebfonts.com/t/6d32b8e06f40fb7698cfb714b9e7975d.woff") format("woff"), url("//db.onlinewebfonts.com/t/6d32b8e06f40fb7698cfb714b9e7975d.ttf") format("truetype"), url("//db.onlinewebfonts.com/t/6d32b8e06f40fb7698cfb714b9e7975d.svg#BillabongW00-Regular") format("svg"); }
+            .nav{
+                height: 54px;
+                width: 100%;
+                position: fixed;
+                z-index: 1;
+                top: 0;
+                left: 0;
+                background-color: white;
+                overflow-x: hidden;
+                border-bottom: 1px solid rgba(var(--b6a,219,219,219),1);
+            }
+            .nav a{
+                padding: 10px 16px 6px 16px;
+                text-decoration: none;
+                color: black;
+                font-size: 20px;
+                display: block;                
+            }
+            .nav a:hover{
+                color: black;
+            }
+            .main{
+                margin-top:100px;
+                margin-left: 20%;
+                margin-right:20%;
+                padding: 0px 10px;
+            }
+            #logo{
+                margin-left:10%;
+                font-family:BillabongW00-Regular; 
+                margin-top:7px;
+            }
+            #home{
+                margin-left:50%;
+                
+            }
+        </style>
+        <title>{% block title %}Instagram{% endblock %}</title>
+    </head>
+    <body>
+        <div class="nav">
+            <a href="/" id="logo">Instagram</a>
+            <a href="/" id="home">Home</a>
+            <a href="/profile/{{user.id}}">Profile</a>
+        </div>
+        <div id="content" name="content" class="main">  
+            <div class="row justify-content-center">
+                <div class="col-8">
+                    {% block content %}
+                    {% endblock %}
+                </div>
+            </div>  
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>    
+    </body>
+</html>

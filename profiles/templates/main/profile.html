@@ -1,0 +1,86 @@
+{% extends "main/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block style1 %}
+<script>
+    function submit(){
+    document.getElementById(upload_profile_pic).submit();
+    }
+</script>
+<style type="text/css">
+    #id_image{
+    position:absolute;
+    height:150px;
+    width:150px;
+    border-radius:75px;
+    opacity:0;
+    }
+    #id_image:hover{
+        cursor:pointer;
+    }
+
+</style>
+{% endblock %}
+{% block title %}{{users_profile.user}}{% endblock %}
+{% block content %}
+    {% if user.id == id %}  
+        <form id="upload_profile_pic" method="POST" action="/profile/{{users_profile.id}}" enctype="multipart/form-data">
+            {% csrf_token %}<input type="file" style="margin-top:20px;" name="image" accept="image/*" required id="id_image">         
+            <button name="pi.{{users_profile.id}}" style="margin-left:-15px;" class="btn btn-success">Post pic</button>
+        </form>
+    {% endif %}
+       <div style="float:left; margin-left:5%;"><img src="{% static 'avatars/images/'%}{{users_profile.user.path}}" alt="Error" style="border-radius:75px; width:150px; height:150px;"></div>
+    <div style="font-size: 50px; margin-left:30px; margin-top:25px; float:left;">{{users_profile.username}}</div>
+    {% if user.id == id %}           
+        <div style="margin-left:300px; margin-top:20px; margin-bottom:-20px;"><a href="/post/create"><button class="btn btn-success">Create New Post</button></a></div>
+    {% else %}
+        {% if following == False %}
+        <form action="" method="POST">
+            {% csrf_token %}<button class="btn btn-primary" style="margin-left:20%; margin-top:20px; margin-bottom:-20px;" name="fl.{{id}}">Follow</button>
+        </form>
+        {% else %}
+        <form action="" method="POST">
+            {% csrf_token %}<button class="btn btn-light" style="margin-left:20%; margin-top:20px; margin-bottom:-20px;" name="fl.{{id}}">UnFollow</button>
+        </form>
+        {% endif %}
+    {% endif %}
+    <div style="clear:both;"></div>
+       Followers: {{users_profile.user.follows_count}}<br>Following: {{users_profile.user.followed_count}}
+    
+    {% for post in users_profile.postauthor.all %}
+    <div style="margin-top:50px; width:642px; height: 800px; border: 1px solid rgba(var(--b6a,219,219,219),1);">
+        <div style="height:70px; border-bottom: 1px solid rgba(var(--b6a,219,219,219),1);">
+            <div style="float: left; margin: 20px 0px 0px 30px;"><p><a href="/{{post.id}}">{{post.user}}</a></p></div>
+        {% if user.id == id %}  
+            <div style="float:left; margin: 20px 0px 0px 450px;"><b>
+                <form action="" method="POST">{% csrf_token %}<button class="btn" name="dp.{{post.id}}">DELETE</button></form></b>
+            </div>
+        {% endif %}</div>
+            <div style="clear:both;">
+        </div>
+        <div style="border-bottom: 1px solid rgba(var(--b6a,219,219,219),1);  line-height: 360px;  text-align: center; width:640px; height:360px;"><img src="{% static 'posts/images/'%}{{post.path}}" alt="Error" style="max-width:640px; max-height:360px;"></div>
+        <br>
+        <div style="height:300px; margin-left:10px;">
+            <div style=" margin: 10px 10px 10px 10px;">Likes count: {{post.liked_by_count}}</div>
+            <div style=" margin: 10px 10px 10px 10px;"><a href="/profile/{{post.user.id}}">{{post.user}}</a> {{post.description}}</div>
+                <div style="overflow-y:scroll; height:130px;">
+                    {% for comment in post.post.all %}
+                        <div style="float:left;"><a href="/profile/{{comment.user.id}}">{{comment.user}}</a> {{comment.text}}</div>
+                        <div style="float:left; font-size:8px; margin: 0px 0px 0px 20px;">
+                            {% if user.id == comment.user.id %}
+                            <b><form action="" method="POST">{% csrf_token %}<button  name="dc.{{comment.id}}">DELETE</button></form></b>
+                            {% endif %}
+                        </div>
+                        <div style="clear: both;"></div>
+                    {% endfor %}
+                </div>
+            <form action="" method="POST">
+                {% csrf_token %}{{form|crispy}}
+                <button class="btn btn-success" style="margin:10px 0px 10px 0px;" name="ac.{{post.id}}">Comment</button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+
+
+{% endblock %}
